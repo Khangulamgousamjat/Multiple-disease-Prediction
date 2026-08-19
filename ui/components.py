@@ -51,22 +51,22 @@ def render_hero() -> None:
 
     logo_src = _logo_b64()
     logo_html = (
-        f'<img src="{logo_src}" alt="Logo" />'
+        f'<img src="{logo_src}" alt="Logo" style="width:180px;height:180px;object-fit:contain;margin:0 auto 20px;display:block;" />'
         if logo_src else
-        '<span style="font-size:64px;">&#127973;</span>'
+        '<span style="font-size:72px;display:block;margin:0 auto 20px;">&#127973;</span>'
     )
 
     # ── Hero top section ─────────────────────────────────────────────────────
     st.markdown(f"""
-<div class="hero-section">
-<span style="display:block;" class="hero-logo">{logo_html}</span>
-<span style="display:block;" class="hero-tag">&#129516; AI-Powered Medical Intelligence</span>
-<h1 class="hero-title">Multiple Disease<br><span>Prediction</span></h1>
-<p class="hero-subtitle">
-    Instant, ML-powered health risk screening across 9 diseases.<br>
+<div class="hero-section" style="text-align:center;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:48px 20px 24px;">
+<div class="hero-logo" style="text-align:center;margin:0 auto 20px;display:flex;justify-content:center;">{logo_html}</div>
+<span class="hero-tag" style="display:inline-flex;margin:0 auto 24px;text-align:center;align-items:center;justify-content:center;">&#129516; AI-Powered Medical Intelligence</span>
+<h1 class="hero-title" style="text-align:center;margin:0 auto 16px;">Multiple Disease<br><span>Prediction</span></h1>
+<p class="hero-subtitle" style="text-align:center;margin:0 auto 14px;max-width:650px;display:block;">
+    Instant, ML-powered health risk screening across all diseases.<br>
     Enter your clinical data &#8212; get a prediction in seconds.
 </p>
-<p class="hero-tagline">Predict &nbsp;&middot;&nbsp; Prevent &nbsp;&middot;&nbsp; Live Healthier</p>
+<p class="hero-tagline" style="text-align:center;margin:0 auto 32px;display:block;">Predict &nbsp;&middot;&nbsp; Prevent &nbsp;&middot;&nbsp; Live Healthier</p>
 </div>
 """, unsafe_allow_html=True)
 

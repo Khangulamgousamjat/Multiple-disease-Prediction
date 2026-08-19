@@ -383,68 +383,92 @@ hr {{
    HERO PAGE
    ══════════════════════════════════════════════ */
 .hero-section {{
-    text-align: center;
-    padding: 64px 24px 48px;
+    text-align: center !important;
+    padding: 48px 24px 32px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 auto !important;
+    max-width: 900px !important;
+}}
+
+.hero-section p, .hero-section h1, .hero-section span {{
+    text-align: center !important;
+}}
+
+.hero-logo {{
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin: 0 auto 20px auto !important;
+    text-align: center !important;
 }}
 
 .hero-logo img {{
-    width: 120px;
-    height: 120px;
-    object-fit: contain;
+    width: 180px !important;
+    height: 180px !important;
+    object-fit: contain !important;
     border: none !important;
     border-radius: 0 !important;
-    margin-bottom: 28px;
+    margin: 0 auto 20px auto !important;
+    display: block !important;
 }}
 
 .hero-tag {{
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    background: {theme.WINE_RED_MUTED};
-    border: 1px solid {theme.WINE_RED_BORDER};
-    color: {theme.WINE_RED_LIGHT};
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 6px 18px;
-    border-radius: {theme.RADIUS_FULL};
-    margin-bottom: 28px;
-    font-family: {theme.FONT_FAMILY};
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    background: {theme.WINE_RED_MUTED} !important;
+    border: 1px solid {theme.WINE_RED_BORDER} !important;
+    color: {theme.WINE_RED_LIGHT} !important;
+    font-size: 11px !important;
+    font-weight: 600 !important;
+    letter-spacing: 1.5px !important;
+    text-transform: uppercase !important;
+    padding: 6px 18px !important;
+    border-radius: {theme.RADIUS_FULL} !important;
+    margin: 0 auto 24px auto !important;
+    font-family: {theme.FONT_FAMILY} !important;
+    text-align: center !important;
 }}
 
 .hero-title {{
-    font-size: 52px;
-    font-weight: 800;
-    color: {theme.TEXT_PRIMARY};
-    line-height: 1.12;
-    margin-bottom: 14px;
-    letter-spacing: -1.5px;
-    font-family: {theme.FONT_FAMILY};
+    font-size: 52px !important;
+    font-weight: 800 !important;
+    color: {theme.TEXT_PRIMARY} !important;
+    line-height: 1.12 !important;
+    margin: 0 auto 16px auto !important;
+    letter-spacing: -1.5px !important;
+    font-family: {theme.FONT_FAMILY} !important;
+    text-align: center !important;
 }}
 
-.hero-title span {{ color: {theme.WINE_RED_LIGHT}; }}
+.hero-title span {{ color: {theme.WINE_RED_LIGHT} !important; }}
 
 .hero-subtitle {{
-    font-size: 17px;
-    color: {theme.TEXT_SECONDARY};
-    margin-bottom: 10px;
-    font-weight: 400;
-    font-family: {theme.FONT_FAMILY};
-    line-height: 1.6;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+    font-size: 17px !important;
+    color: {theme.TEXT_SECONDARY} !important;
+    margin: 0 auto 14px auto !important;
+    font-weight: 400 !important;
+    font-family: {theme.FONT_FAMILY} !important;
+    line-height: 1.6 !important;
+    max-width: 650px !important;
+    text-align: center !important;
+    display: block !important;
 }}
 
 .hero-tagline {{
-    font-size: 11px;
-    color: {theme.TEXT_MUTED};
-    letter-spacing: 3px;
-    margin-bottom: 36px;
-    text-transform: uppercase;
-    font-weight: 500;
-    font-family: {theme.FONT_FAMILY};
+    font-size: 11px !important;
+    color: {theme.TEXT_MUTED} !important;
+    letter-spacing: 3px !important;
+    margin: 0 auto 32px auto !important;
+    text-transform: uppercase !important;
+    font-weight: 500 !important;
+    font-family: {theme.FONT_FAMILY} !important;
+    text-align: center !important;
+    display: block !important;
 }}
 
 /* Stats row */
