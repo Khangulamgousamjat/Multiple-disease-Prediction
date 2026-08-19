@@ -79,10 +79,6 @@ def render_hero() -> None:
     st.markdown("""
     <div class="stats-row">
         <div class="stat-item">
-            <div class="stat-number">9</div>
-            <div class="stat-label">Diseases Covered</div>
-        </div>
-        <div class="stat-item">
             <div class="stat-number">ML</div>
             <div class="stat-label">Powered</div>
         </div>
