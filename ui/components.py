@@ -51,10 +51,26 @@ def render_hero() -> None:
 
     logo_src = _logo_b64()
     logo_html = (
-        f'<img src="{logo_src}" alt="Logo" style="width:180px;height:180px;object-fit:contain;margin:0 auto 20px;display:block;" />'
+        f'<img src="{logo_src}" alt="Logo" style="width:190px;height:190px;object-fit:contain;margin:0 auto 16px;display:block;border-radius:12px;" />'
         if logo_src else
         '<span style="font-size:72px;display:block;margin:0 auto 20px;">&#127973;</span>'
     )
+
+    # ── Top Navigation Bar (Upper Right 'Get Started' button) ───────────────
+    top_nav_l, top_nav_r = st.columns([4, 1.2])
+    with top_nav_l:
+        st.markdown(f"""
+        <div style="display:flex;align-items:center;gap:12px;padding:4px 0 16px 0;">
+            <img src="{logo_src}" style="width:36px;height:36px;object-fit:contain;border:none !important;border-radius:6px !important;" />
+            <span style="font-size:15px;font-weight:700;color:#F2F2F2;letter-spacing:0.3px;font-family:'Inter',sans-serif;">Multiple Disease Prediction</span>
+        </div>
+        """, unsafe_allow_html=True)
+    with top_nav_r:
+        if st.button("Get Started", key="hero_top_cta", use_container_width=True):
+            st.session_state.page = "app"
+            st.rerun()
+
+    st.markdown("<div style='height:1px;background:rgba(255,255,255,0.06);margin-bottom:16px;'></div>", unsafe_allow_html=True)
 
     # ── Hero top section ─────────────────────────────────────────────────────
     st.markdown(f"""
