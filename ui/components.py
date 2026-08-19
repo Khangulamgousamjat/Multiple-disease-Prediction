@@ -13,8 +13,10 @@ import streamlit as st
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _logo_b64() -> str:
-    """Return base64 data-URI for the project logo, or empty string."""
-    for path in ["logo.png", "Frontend/logo.png"]:
+    """Return base64 data-URI for the project logo, or empty string.
+    Prefers logo1.png (high-quality) then logo.png as fallback.
+    """
+    for path in ["logo1.png", "logo.png", "Frontend/logo1.png", "Frontend/logo.png"]:
         if os.path.exists(path):
             with open(path, "rb") as f:
                 data = base64.b64encode(f.read()).decode()
@@ -66,19 +68,19 @@ def render_hero() -> None:
     </div>
     """, unsafe_allow_html=True)
 
-    # ── CTA button ────────────────────────────────────────────────────────────
+    # ── CTA button — no rocket emoji ─────────────────────────────────────────
     _, col_btn, _ = st.columns([2.5, 1, 2.5])
     with col_btn:
-        if st.button("🚀  Get Started", key="hero_cta", use_container_width=True):
+        if st.button("Get Started", key="hero_cta", use_container_width=True):
             st.session_state.page = "app"
             st.rerun()
 
-    # ── Stats row ─────────────────────────────────────────────────────────────
+    # ── Stats row — actual disease names instead of "9+" ─────────────────────
     st.markdown("""
     <div class="stats-row">
         <div class="stat-item">
-            <div class="stat-number">9+</div>
-            <div class="stat-label">Diseases</div>
+            <div class="stat-number">9</div>
+            <div class="stat-label">Diseases Covered</div>
         </div>
         <div class="stat-item">
             <div class="stat-number">ML</div>
@@ -166,11 +168,11 @@ def render_hero() -> None:
         <div class="section-title">Medical Disclaimer</div>
     </div>
     <div class="disclaimer-card">
-        <div class="disclaimer-title">⚕️ For Informational Purposes Only</div>
+        <div class="disclaimer-title">&#9877; For Informational Purposes Only</div>
         <div class="disclaimer-text">
             This application uses machine-learning models trained on publicly available medical datasets.
-            The predictions generated are <strong style="color:#9A9A9A;">for educational and informational 
-            purposes only</strong> and do not constitute a medical diagnosis or professional medical advice.<br><br>
+            The predictions generated are for educational and informational purposes only
+            and do not constitute a medical diagnosis or professional medical advice.<br><br>
             Always consult a qualified and licensed healthcare professional for any health concerns,
             medical decisions, or before changing any treatment or medication.
             Do not disregard professional advice because of something you read here.
@@ -193,7 +195,7 @@ def page_header(
     sub_html = f'<div class="page-header-desc">{subtitle}</div>' if subtitle else ""
     st.markdown(f"""
     <div class="page-header">
-        <div class="page-header-tag">🔬 {tag}</div>
+        <div class="page-header-tag">&#128300; {tag}</div>
         <div class="page-header-title">{title}</div>
         {sub_html}
     </div>
@@ -224,12 +226,13 @@ def render_result(
 ) -> None:
     """
     Render a professional prediction result card.
+    Splits into multiple st.markdown() calls to avoid Streamlit HTML nesting issues.
 
     Args:
         is_positive   : True if the model predicted the disease is present.
         disease_name  : Human-readable disease name (e.g. 'Diabetes').
         patient_name  : Optional patient name to display.
-        custom_message: Override the default result message.
+        custom_message: Plain-text override for the result message.
     """
     if is_positive:
         card_class  = "risk"
@@ -237,7 +240,7 @@ def render_result(
         icon        = "⚠️"
         title       = f"{disease_name} Risk Detected"
         default_msg = (
-            f"Our model has identified potential risk indicators for <strong>{disease_name}</strong>. "
+            f"Our model has identified potential risk indicators for {disease_name}. "
             "This does not confirm a diagnosis. Please consult a healthcare professional "
             "promptly for proper clinical evaluation and testing."
         )
@@ -247,33 +250,44 @@ def render_result(
         icon        = "✅"
         title       = f"No {disease_name} Detected"
         default_msg = (
-            f"Our model indicates lower risk indicators for <strong>{disease_name}</strong>. "
+            f"Our model indicates lower risk indicators for {disease_name}. "
             "Continue maintaining a healthy lifestyle, stay hydrated, eat balanced meals, "
             "exercise regularly, and schedule routine medical check-ups."
         )
 
+    # Use plain text only — avoid passing raw HTML in message to prevent rendering issues
     message = custom_message if custom_message else default_msg
 
-    name_html = ""
+    name_row = ""
     if patient_name:
-        name_html = f'<div class="result-patient">Patient: <strong>{patient_name}</strong></div>'
+        name_row = f"""
+        <tr>
+            <td style="padding:4px 0;color:#9A9A9A;font-size:14px;text-align:center;">
+                Patient: <span style="color:#F2F2F2;font-weight:600;">{patient_name}</span>
+            </td>
+        </tr>"""
 
+    # ── Card header (icon, title, patient) ────────────────────────────────────
     st.markdown(f"""
     <div class="result-card {card_class}">
         <div class="result-label">Prediction Result</div>
-        <span class="result-icon">{icon}</span>
+        <div style="font-size:52px;line-height:1;margin-bottom:14px;">{icon}</div>
         <div class="result-title {title_class}">{title}</div>
-        {name_html}
-        <div class="result-divider"></div>
-        <div class="result-message">{message}</div>
+        {"" if not patient_name else f'<div class="result-patient">Patient: <span style="color:#F2F2F2;font-weight:600;">{patient_name}</span></div>'}
+        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:16px auto;width:50%;">
+        <div style="font-size:14px;color:#5A5A5A;line-height:1.75;max-width:520px;margin:0 auto;">
+            {message}
+        </div>
     </div>
-    <div style="margin-top:12px;">
-        <div class="disclaimer-card">
-            <div class="disclaimer-text">
-                ⚕️ This prediction is for informational purposes only.
-                Consult a qualified healthcare professional for medical advice, 
-                diagnosis, or treatment.
-            </div>
+    """, unsafe_allow_html=True)
+
+    # ── Disclaimer below card ─────────────────────────────────────────────────
+    st.markdown("""
+    <div style="margin-top:10px;" class="disclaimer-card">
+        <div class="disclaimer-text">
+            &#9877; This prediction is for informational purposes only.
+            Consult a qualified healthcare professional for medical advice,
+            diagnosis, or treatment.
         </div>
     </div>
     """, unsafe_allow_html=True)

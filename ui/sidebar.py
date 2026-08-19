@@ -35,7 +35,7 @@ ICONS = [
 
 
 def _logo_b64() -> str:
-    for path in ["logo.png", "Frontend/logo.png"]:
+    for path in ["logo1.png", "logo.png", "Frontend/logo1.png", "Frontend/logo.png"]:
         if os.path.exists(path):
             with open(path, "rb") as f:
                 return base64.b64encode(f.read()).decode()

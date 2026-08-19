@@ -117,8 +117,23 @@ if selected == "Disease Prediction":
     disease_model = DiseaseModel()
     disease_model.load_xgboost("model/xgboost_model.json")
 
+    # Format symptom names: replace underscores with spaces and title-case
+    # e.g. "abdominal_pain" → "Abdominal Pain"
+    # Keep a mapping back to original names for prediction
+    symptom_display_map = {
+        s.replace("_", " ").title(): s
+        for s in disease_model.all_symptoms
+    }
+    display_options = sorted(symptom_display_map.keys())
+
     section_label("Symptom Input")
-    symptoms = st.multiselect("What are your symptoms?", options=disease_model.all_symptoms)
+    selected_display = st.multiselect(
+        "What are your symptoms?",
+        options=display_options,
+        key="general_symptoms",
+    )
+    # Convert back to underscore names for the model
+    symptoms = [symptom_display_map[d] for d in selected_display]
     X = prepare_symptoms_array(symptoms)
 
     st.markdown("<br>", unsafe_allow_html=True)
@@ -130,12 +145,13 @@ if selected == "Disease Prediction":
             with st.spinner(""):
                 prediction, prob = disease_model.predict(X)
 
+            # Plain text only — no HTML tags in custom_message
             render_result(
                 is_positive=True,
                 disease_name=prediction,
                 custom_message=(
-                    f"The model predicts <strong>{prediction}</strong> with "
-                    f"<strong>{prob*100:.1f}%</strong> confidence based on the symptoms provided. "
+                    f"The model predicts \"{prediction}\" with "
+                    f"{prob*100:.1f}% confidence based on the symptoms provided. "
                     "Please consult a healthcare professional for a clinical diagnosis."
                 ),
             )
@@ -148,6 +164,7 @@ if selected == "Disease Prediction":
                 precautions = disease_model.predicted_disease_precautions()
                 for i in range(4):
                     st.write(f"**{i+1}.** {precautions[i]}")
+
 
 
 # ══════════════════════════════════════════════════════════════════════════════

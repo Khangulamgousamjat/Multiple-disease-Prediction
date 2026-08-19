@@ -37,6 +37,12 @@ header    {{ visibility: hidden; }}
 [data-testid="stToolbar"] {{ visibility: hidden; }}
 [data-testid="stDecoration"] {{ visibility: hidden; }}
 
+/* ── Hide sidebar collapse button (keyboard_double_arrow_left icon) ──────── */
+[data-testid="collapsedControl"]          {{ display: none !important; }}
+[data-testid="stSidebarCollapseButton"]   {{ display: none !important; }}
+button[data-testid="baseButton-header"]   {{ display: none !important; }}
+section[data-testid="stSidebar"] > div > button {{ display: none !important; }}
+
 /* ══════════════════════════════════════════════
    MAIN CONTENT AREA
    ══════════════════════════════════════════════ */
