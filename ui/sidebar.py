@@ -50,38 +50,37 @@ def render_sidebar() -> str:
     logo = _logo_b64()
 
     with st.sidebar:
-        # ── Brand header ──────────────────────────────────────────────────────
+        # ── Brand header (Fixed in upper left bar) ─────────────────────────────
         if logo:
             st.markdown(f"""
             <div style="
-                display:flex; align-items:center; gap:12px;
-                padding: 20px 16px 14px 16px;
+                display:flex; flex-direction:column; align-items:center; text-align:center;
+                padding: 18px 12px 14px 12px;
                 border-bottom: 1px solid #1C1C1C;
-                margin-bottom: 4px;
+                margin-bottom: 8px;
+                background: #0D0D0D;
             ">
                 <img src="data:image/png;base64,{logo}"
-                     style="width:34px;height:34px;object-fit:contain;
-                            border:none !important;border-radius:0 !important;" />
-                <div>
-                    <div style="font-size:13px;font-weight:700;
-                                color:#F2F2F2;line-height:1.2;
-                                font-family:'Inter',sans-serif;">
-                        Disease Predict
-                    </div>
-                    <div style="font-size:10px;color:#5A5A5A;
-                                font-family:'Inter',sans-serif;letter-spacing:0.3px;">
-                        AI Medical Analysis
-                    </div>
+                     style="width:68px;height:68px;object-fit:contain;
+                            border:none !important;border-radius:10px !important;margin-bottom:8px;display:block;" />
+                <div style="font-size:14px;font-weight:700;
+                            color:#F2F2F2;line-height:1.25;
+                            font-family:'Inter',sans-serif;letter-spacing:-0.2px;">
+                    Disease Prediction
+                </div>
+                <div style="font-size:10px;color:#C0394A;font-weight:600;
+                            font-family:'Inter',sans-serif;letter-spacing:1px;text-transform:uppercase;margin-top:3px;">
+                    AI Medical Analysis
                 </div>
             </div>
             """, unsafe_allow_html=True)
         else:
             st.markdown("""
-            <div style="padding:20px 16px 14px;border-bottom:1px solid #1C1C1C;margin-bottom:4px;">
+            <div style="padding:18px 14px 14px;border-bottom:1px solid #1C1C1C;margin-bottom:8px;text-align:center;">
                 <div style="font-size:14px;font-weight:700;color:#F2F2F2;
-                            font-family:'Inter',sans-serif;">🏥 Disease Predict</div>
-                <div style="font-size:10px;color:#5A5A5A;
-                            font-family:'Inter',sans-serif;margin-top:2px;">
+                            font-family:'Inter',sans-serif;">🏥 Disease Prediction</div>
+                <div style="font-size:10px;color:#C0394A;font-weight:600;letter-spacing:1px;text-transform:uppercase;
+                            font-family:'Inter',sans-serif;margin-top:3px;">
                     AI Medical Analysis
                 </div>
             </div>
