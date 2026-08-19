@@ -1,6 +1,10 @@
 """
 components.py — Reusable UI components for the Multiple Disease Prediction app.
 All visual presentation lives here; ML logic stays in app.py.
+
+KEY: All inner elements inside result-card use <span style="display:block">.
+Streamlit's markdown parser escapes nested <div> and <hr> inside an outer <div>,
+but passes inline <span> elements through safely — preventing raw HTML output.
 """
 
 import base64
@@ -13,7 +17,7 @@ import streamlit as st
 # ─────────────────────────────────────────────────────────────────────────────
 
 def _logo_b64() -> str:
-    """Return base64 data-URI for the project logo, or empty string.
+    """Return base64 data-URI for the project logo.
     Prefers logo1.png (high-quality) then logo.png as fallback.
     """
     for path in ["logo1.png", "logo.png", "Frontend/logo1.png", "Frontend/logo.png"]:
@@ -31,13 +35,11 @@ def _logo_b64() -> str:
 def render_loader(text: str = "Analyzing...") -> None:
     """Render the wine-red animated loading bar."""
     st.markdown(f"""
-    <div class="wine-loader">
-        <div class="wine-loader-text">{text}</div>
-        <div class="wine-loader-bar-bg">
-            <div class="wine-loader-bar"></div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="wine-loader">
+<span style="display:block;" class="wine-loader-text">{text}</span>
+<span style="display:block;" class="wine-loader-bar-bg"><span class="wine-loader-bar"></span></span>
+</div>
+""", unsafe_allow_html=True)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -51,77 +53,76 @@ def render_hero() -> None:
     logo_html = (
         f'<img src="{logo_src}" alt="Logo" />'
         if logo_src else
-        '<span style="font-size:64px;">🏥</span>'
+        '<span style="font-size:64px;">&#127973;</span>'
     )
 
     # ── Hero top section ─────────────────────────────────────────────────────
     st.markdown(f"""
-    <div class="hero-section">
-        <div class="hero-logo">{logo_html}</div>
-        <div class="hero-tag">🧬 AI-Powered Medical Intelligence</div>
-        <h1 class="hero-title">Multiple Disease<br><span>Prediction</span></h1>
-        <p class="hero-subtitle">
-            Instant, ML-powered health risk screening across 9 diseases.<br>
-            Enter your clinical data — get a prediction in seconds.
-        </p>
-        <p class="hero-tagline">Predict &nbsp;·&nbsp; Prevent &nbsp;·&nbsp; Live Healthier</p>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="hero-section">
+<span style="display:block;" class="hero-logo">{logo_html}</span>
+<span style="display:block;" class="hero-tag">&#129516; AI-Powered Medical Intelligence</span>
+<h1 class="hero-title">Multiple Disease<br><span>Prediction</span></h1>
+<p class="hero-subtitle">
+    Instant, ML-powered health risk screening across 9 diseases.<br>
+    Enter your clinical data &#8212; get a prediction in seconds.
+</p>
+<p class="hero-tagline">Predict &nbsp;&middot;&nbsp; Prevent &nbsp;&middot;&nbsp; Live Healthier</p>
+</div>
+""", unsafe_allow_html=True)
 
-    # ── CTA button — no rocket emoji ─────────────────────────────────────────
+    # ── CTA button ────────────────────────────────────────────────────────────
     _, col_btn, _ = st.columns([2.5, 1, 2.5])
     with col_btn:
         if st.button("Get Started", key="hero_cta", use_container_width=True):
             st.session_state.page = "app"
             st.rerun()
 
-    # ── Stats row — actual disease names instead of "9+" ─────────────────────
+    # ── Stats row ─────────────────────────────────────────────────────────────
     st.markdown("""
-    <div class="stats-row">
-        <div class="stat-item">
-            <div class="stat-number">ML</div>
-            <div class="stat-label">Powered</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number">⚡</div>
-            <div class="stat-label">Instant Results</div>
-        </div>
-        <div class="stat-item">
-            <div class="stat-number">Free</div>
-            <div class="stat-label">Always Free</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="stats-row">
+<span style="display:inline-block;text-align:center;min-width:100px;">
+    <span style="display:block;font-size:30px;font-weight:800;color:#8B1E2D;line-height:1;margin-bottom:5px;">ML</span>
+    <span style="display:block;font-size:11px;color:#5A5A5A;letter-spacing:0.5px;">Powered</span>
+</span>
+<span style="display:inline-block;text-align:center;min-width:100px;">
+    <span style="display:block;font-size:30px;font-weight:800;color:#8B1E2D;line-height:1;margin-bottom:5px;">&#9889;</span>
+    <span style="display:block;font-size:11px;color:#5A5A5A;letter-spacing:0.5px;">Instant Results</span>
+</span>
+<span style="display:inline-block;text-align:center;min-width:100px;">
+    <span style="display:block;font-size:30px;font-weight:800;color:#8B1E2D;line-height:1;margin-bottom:5px;">Free</span>
+    <span style="display:block;font-size:11px;color:#5A5A5A;letter-spacing:0.5px;">Always Free</span>
+</span>
+</div>
+""", unsafe_allow_html=True)
 
     # ── Supported diseases ────────────────────────────────────────────────────
     st.markdown("""
-    <div class="section-heading">
-        <div class="section-label">Capabilities</div>
-        <div class="section-title">What We Predict</div>
-        <div class="section-subtitle">Accurate ML-powered screening across multiple conditions</div>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="section-heading">
+<span style="display:block;" class="section-label">Capabilities</span>
+<span style="display:block;" class="section-title">What We Predict</span>
+<span style="display:block;" class="section-subtitle">Accurate ML-powered screening across multiple conditions</span>
+</div>
+""", unsafe_allow_html=True)
 
     DISEASES = [
-        ("🔬", "General Disease",   "Multi-symptom XGBoost classification"),
-        ("🩸", "Diabetes",          "Blood glucose & clinical indicators"),
-        ("❤️",  "Heart Disease",     "Cardiovascular risk assessment"),
-        ("🧠", "Parkinson's",       "Voice biomarker analysis"),
-        ("🫀", "Liver Disease",     "Liver function panel screening"),
-        ("🦠", "Hepatitis",         "Hepatic biomarker prediction"),
-        ("🫁", "Lung Cancer",       "Symptom & lifestyle risk factors"),
-        ("🫘", "Chronic Kidney",    "Renal health risk screening"),
-        ("🎗️", "Breast Cancer",     "Tumor feature classification"),
+        ("&#128302;", "General Disease",   "Multi-symptom XGBoost classification"),
+        ("&#129656;", "Diabetes",          "Blood glucose &amp; clinical indicators"),
+        ("&#10084;&#65039;",  "Heart Disease",  "Cardiovascular risk assessment"),
+        ("&#129504;", "Parkinson's",       "Voice biomarker analysis"),
+        ("&#129920;", "Liver Disease",     "Liver function panel screening"),
+        ("&#129408;", "Hepatitis",         "Hepatic biomarker prediction"),
+        ("&#129785;", "Lung Cancer",       "Symptom &amp; lifestyle risk factors"),
+        ("&#129656;", "Chronic Kidney",    "Renal health risk screening"),
+        ("&#127895;&#65039;", "Breast Cancer", "Tumor feature classification"),
     ]
 
     cards_html = '<div class="disease-grid">'
     for icon, name, desc in DISEASES:
-        cards_html += f"""
-        <div class="disease-card">
-            <span class="disease-card-icon">{icon}</span>
-            <div class="disease-card-name">{name}</div>
-            <div class="disease-card-desc">{desc}</div>
-        </div>"""
+        cards_html += f"""<div class="disease-card">
+<span style="display:block;font-size:28px;margin-bottom:10px;">{icon}</span>
+<span style="display:block;font-size:13px;font-weight:600;color:#F2F2F2;margin-bottom:5px;">{name}</span>
+<span style="display:block;font-size:11px;color:#5A5A5A;line-height:1.5;">{desc}</span>
+</div>"""
     cards_html += "</div>"
     st.markdown(cards_html, unsafe_allow_html=True)
 
@@ -129,29 +130,28 @@ def render_hero() -> None:
 
     # ── How it works ──────────────────────────────────────────────────────────
     st.markdown("""
-    <div class="section-heading">
-        <div class="section-label">Process</div>
-        <div class="section-title">How It Works</div>
-        <div class="section-subtitle">Four simple steps to your health insight</div>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="section-heading">
+<span style="display:block;" class="section-label">Process</span>
+<span style="display:block;" class="section-title">How It Works</span>
+<span style="display:block;" class="section-subtitle">Four simple steps to your health insight</span>
+</div>
+""", unsafe_allow_html=True)
 
     STEPS = [
-        ("01", "🏥", "Select a Module",     "Pick from 9 disease-prediction modules in the sidebar"),
-        ("02", "📋", "Enter Health Data",   "Fill in your clinical measurements or symptom history"),
-        ("03", "🤖", "Run the Model",       "Our trained ML model analyzes your data instantly"),
-        ("04", "📊", "Review Your Result",  "Receive a clear, structured prediction with guidance"),
+        ("01", "&#127973;", "Select a Module",     "Pick from 9 disease-prediction modules in the sidebar"),
+        ("02", "&#128203;", "Enter Health Data",   "Fill in your clinical measurements or symptom history"),
+        ("03", "&#129302;", "Run the Model",       "Our trained ML model analyzes your data instantly"),
+        ("04", "&#128202;", "Review Your Result",  "Receive a clear, structured prediction with guidance"),
     ]
 
     steps_html = '<div class="steps-grid">'
     for num, icon, title, desc in STEPS:
-        steps_html += f"""
-        <div class="step-card">
-            <div class="step-number">Step {num}</div>
-            <span class="step-icon">{icon}</span>
-            <div class="step-title">{title}</div>
-            <div class="step-desc">{desc}</div>
-        </div>"""
+        steps_html += f"""<div class="step-card">
+<span style="display:block;font-size:10px;font-weight:700;color:#8B1E2D;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;">Step {num}</span>
+<span style="display:block;font-size:26px;margin-bottom:10px;">{icon}</span>
+<span style="display:block;font-size:14px;font-weight:600;color:#F2F2F2;margin-bottom:5px;">{title}</span>
+<span style="display:block;font-size:11px;color:#5A5A5A;line-height:1.5;">{desc}</span>
+</div>"""
     steps_html += "</div>"
     st.markdown(steps_html, unsafe_allow_html=True)
 
@@ -159,23 +159,22 @@ def render_hero() -> None:
 
     # ── Disclaimer ────────────────────────────────────────────────────────────
     st.markdown("""
-    <div class="section-heading">
-        <div class="section-label">Important Notice</div>
-        <div class="section-title">Medical Disclaimer</div>
-    </div>
-    <div class="disclaimer-card">
-        <div class="disclaimer-title">&#9877; For Informational Purposes Only</div>
-        <div class="disclaimer-text">
-            This application uses machine-learning models trained on publicly available medical datasets.
-            The predictions generated are for educational and informational purposes only
-            and do not constitute a medical diagnosis or professional medical advice.<br><br>
-            Always consult a qualified and licensed healthcare professional for any health concerns,
-            medical decisions, or before changing any treatment or medication.
-            Do not disregard professional advice because of something you read here.
-        </div>
-    </div>
-    <br><br>
-    """, unsafe_allow_html=True)
+<div class="section-heading">
+<span style="display:block;" class="section-label">Important Notice</span>
+<span style="display:block;" class="section-title">Medical Disclaimer</span>
+</div>
+<div class="disclaimer-card">
+<span style="display:block;" class="disclaimer-title">&#9877; For Informational Purposes Only</span>
+<span style="display:block;" class="disclaimer-text">
+This application uses machine-learning models trained on publicly available medical datasets.
+The predictions generated are for educational and informational purposes only
+and do not constitute a medical diagnosis or professional medical advice.<br><br>
+Always consult a qualified and licensed healthcare professional for any health concerns,
+medical decisions, or before changing any treatment or medication.
+</span>
+</div>
+<br><br>
+""", unsafe_allow_html=True)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -188,14 +187,14 @@ def page_header(
     tag: str = "Disease Prediction"
 ) -> None:
     """Consistent page header for every disease section."""
-    sub_html = f'<div class="page-header-desc">{subtitle}</div>' if subtitle else ""
+    sub_html = f'<span style="display:block;" class="page-header-desc">{subtitle}</span>' if subtitle else ""
     st.markdown(f"""
-    <div class="page-header">
-        <div class="page-header-tag">&#128300; {tag}</div>
-        <div class="page-header-title">{title}</div>
-        {sub_html}
-    </div>
-    """, unsafe_allow_html=True)
+<div class="page-header">
+<span style="display:block;" class="page-header-tag">&#128300; {tag}</span>
+<span style="display:block;" class="page-header-title">{title}</span>
+{sub_html}
+</div>
+""", unsafe_allow_html=True)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -222,19 +221,17 @@ def render_result(
 ) -> None:
     """
     Render a professional prediction result card.
-    Splits into multiple st.markdown() calls to avoid Streamlit HTML nesting issues.
 
-    Args:
-        is_positive   : True if the model predicted the disease is present.
-        disease_name  : Human-readable disease name (e.g. 'Diabetes').
-        patient_name  : Optional patient name to display.
-        custom_message: Plain-text override for the result message.
+    IMPORTANT — uses only <span style="display:block"> for inner elements.
+    Streamlit's markdown parser escapes nested <div> and <hr> when they appear
+    inside an outer block-level <div>.  Inline <span> elements pass through
+    the parser safely, so this avoids the raw-HTML-in-card bug.
     """
     if is_positive:
         card_class  = "risk"
-        title_class = "risk"
-        icon        = "⚠️"
+        icon        = "&#9888;&#65039;"   # ⚠️
         title       = f"{disease_name} Risk Detected"
+        title_color = "#E57373"
         default_msg = (
             f"Our model has identified potential risk indicators for {disease_name}. "
             "This does not confirm a diagnosis. Please consult a healthcare professional "
@@ -242,48 +239,39 @@ def render_result(
         )
     else:
         card_class  = "safe"
-        title_class = "safe"
-        icon        = "✅"
+        icon        = "&#9989;"           # ✅
         title       = f"No {disease_name} Detected"
+        title_color = "#6FCF97"
         default_msg = (
             f"Our model indicates lower risk indicators for {disease_name}. "
             "Continue maintaining a healthy lifestyle, stay hydrated, eat balanced meals, "
             "exercise regularly, and schedule routine medical check-ups."
         )
 
-    # Use plain text only — avoid passing raw HTML in message to prevent rendering issues
     message = custom_message if custom_message else default_msg
 
-    name_row = ""
-    if patient_name:
-        name_row = f"""
-        <tr>
-            <td style="padding:4px 0;color:#9A9A9A;font-size:14px;text-align:center;">
-                Patient: <span style="color:#F2F2F2;font-weight:600;">{patient_name}</span>
-            </td>
-        </tr>"""
+    name_span = (
+        f'<span style="display:block;font-size:14px;color:#9A9A9A;margin-bottom:10px;">'
+        f'Patient: <b style="color:#F2F2F2;font-weight:600;">{patient_name}</b></span>'
+        if patient_name else ""
+    )
 
-    # ── Card header (icon, title, patient) ────────────────────────────────────
+    # ── Result card ──────────────────────────────────────────────────────────
+    # All inner elements are <span style="display:block"> — NOT <div> or <hr>
     st.markdown(f"""
-    <div class="result-card {card_class}">
-        <div class="result-label">Prediction Result</div>
-        <div style="font-size:52px;line-height:1;margin-bottom:14px;">{icon}</div>
-        <div class="result-title {title_class}">{title}</div>
-        {"" if not patient_name else f'<div class="result-patient">Patient: <span style="color:#F2F2F2;font-weight:600;">{patient_name}</span></div>'}
-        <hr style="border:none;border-top:1px solid rgba(255,255,255,0.08);margin:16px auto;width:50%;">
-        <div style="font-size:14px;color:#5A5A5A;line-height:1.75;max-width:520px;margin:0 auto;">
-            {message}
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="result-card {card_class}">
+<span style="display:block;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#5A5A5A;margin-bottom:14px;">PREDICTION RESULT</span>
+<span style="display:block;font-size:52px;line-height:1.2;margin-bottom:12px;">{icon}</span>
+<span style="display:block;font-size:22px;font-weight:700;color:{title_color};margin-bottom:10px;">{title}</span>
+{name_span}
+<span style="display:block;width:50%;height:1px;background:rgba(255,255,255,0.08);margin:12px auto 14px;"></span>
+<span style="display:block;font-size:14px;color:#5A5A5A;line-height:1.75;max-width:520px;margin:0 auto;">{message}</span>
+</div>
+""", unsafe_allow_html=True)
 
-    # ── Disclaimer below card ─────────────────────────────────────────────────
+    # ── Disclaimer ───────────────────────────────────────────────────────────
     st.markdown("""
-    <div style="margin-top:10px;" class="disclaimer-card">
-        <div class="disclaimer-text">
-            &#9877; This prediction is for informational purposes only.
-            Consult a qualified healthcare professional for medical advice,
-            diagnosis, or treatment.
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+<div class="disclaimer-card" style="margin-top:10px;">
+<span style="display:block;font-size:13px;color:#5A5A5A;line-height:1.75;">&#9877; This prediction is for informational purposes only. Consult a qualified healthcare professional for medical advice, diagnosis, or treatment.</span>
+</div>
+""", unsafe_allow_html=True)
